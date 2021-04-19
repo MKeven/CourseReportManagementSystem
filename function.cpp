@@ -7,16 +7,6 @@ int flag = 0;
 extern User User_Now;
 
 /***************************选项位置*******************************/
-//int Location_Advanced2[8][4] = {                                 //选项位置{x,y,x+w,y+h}
-//                                {577, 104, 922, 275},
-//                                {940, 105, 1102, 270},
-//                                {580, 285, 742, 450},
-//                                {762, 285, 920, 450},
-//                                {940, 285, 1102, 450},
-//                                {580, 465, 742, 625},
-//                                {762, 465, 920, 625},
-//                                {940, 465, 1102, 625}
-//                              };      
 
 int Location_Common[3][4] = {
                               {580, 105, 920, 270},
@@ -55,7 +45,7 @@ void Init_Show(void)                          //初始化界面
     putimage(0,0,&Start);
     settextstyle(40, 15, "微软雅黑");
     outtextxy(520,500,"downloading...");
-    Sleep(2000);                              //等待三秒
+    Sleep(2000);                              //等待两秒
 }
 
 void User_Init(void)
@@ -116,7 +106,10 @@ void Student_Init(void)
 User Account_Check(void)
 {
     User user;
-    InputBox(user.Account, Lenth_Account, "请输入账号", "登录");
+    bool Ensure;
+    Ensure = InputBox(user.Account, Lenth_Account, "请输入账号", "登录",0 , 0, 0, false);
+    if (!Ensure)
+        exit(0);
 
 restart:
 
