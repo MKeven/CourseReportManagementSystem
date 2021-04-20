@@ -107,16 +107,17 @@ User Account_Check(void)
 {
     User user;
     bool Ensure;
-    Ensure = InputBox(user.Account, Lenth_Account, "请输入账号", "登录",0 , 0, 0, false);
-    if (!Ensure)
-        exit(0);
+    Ensure = InputBox(user.Account, Lenth_Account, "请输入账号", "登录", 0, 0, 0, false);
+    if (!Ensure)exit(0);
+        
 
 restart:
 
     int j = 0;
     if (strlen(user.Account) == 0)                                  //判断是否输入，如果没有输入，重新输入
     {
-        InputBox(user.Account, Lenth_Account, "用户名为空，请重新输入", "登录");
+        Ensure = InputBox(user.Account, Lenth_Account, "用户名为空，请重新输入", "登录", 0, 0, 0, false);
+        if (!Ensure)exit(0);
         goto restart;
     }
 
@@ -125,27 +126,30 @@ restart:
         j++;
         if(j == User_Number)
         {
-            InputBox(user.Account, Lenth_Account, "用户名不存在，请重新输入", "登录");
+            Ensure = InputBox(user.Account, Lenth_Account, "用户名不存在，请重新输入", "登录", 0, 0, 0, false);
+            if (!Ensure)exit(0);
             goto restart;
         }
     }
 
-    InputBox(user.Password, Lenth_Password, "请输入密码", "登录");
+    Ensure = InputBox(user.Password, Lenth_Password, "请输入密码", "登录", 0, 0, 0, false);
+    if (!Ensure)exit(0);
 
     if (strcmp(user.Password, All_User[j].Password) == 0)           //密码正确，进入系统
         return user = All_User[j];
   
     else                                                             //密码错误重新输入
-
     {
-        InputBox(user.Password, Lenth_Account, "密码错误，请重新输入", "登录");
+        Ensure = InputBox(user.Password, Lenth_Account, "密码错误，请重新输入", "登录", 0, 0, 0, false);
+        if (!Ensure)exit(0);
 
         if (strcmp(user.Password, All_User[j].Password) == 0)
             return user = All_User[j];
 
         else                                                           //第二次输入错误，重新登录
         {
-            InputBox(user.Account, Lenth_Account, "密码错误，请重新登录", "登录");
+            Ensure = InputBox(user.Account, Lenth_Account, "密码错误，请重新登录", "登录", 0, 0, 0, false);
+            if (!Ensure)exit(0);
             goto  restart;
         }
     }
@@ -186,7 +190,7 @@ void User_Common(void)                                      //普通用户操作界面
     {
         switch (i)
         {
-        case(0):Information_Queryc(); FlushMouseMsgBuffer(); break;              //信息查找
+        case(0):Information_Queryc(); FlushMouseMsgBuffer(); break;             //信息查找
         case(1):Grade_Update(); FlushMouseMsgBuffer(); break;                   //报告提交
         case(2):exit(0);                                                        //退出系统
         }
@@ -244,6 +248,32 @@ void Student_Management(void)
 
     while (1)                                           //在二级菜单内循环
     {
+        if (flag == 0)
+        {
+            IMAGE Student_Management;//清屏
+            loadimage(&Student_Management, "F:\\个人资料\\程序\\CourseManagement\\Image\\Student_Management.jpg", 1280, 720);
+            putimage(0, 0, &Student_Management);
+
+            for (int s = 0; s < Student_Number; s++)
+            {
+                settextstyle(25, 9, "微软雅黑");
+                settextcolor(BLACK);
+
+                outtextxy(217, 152 + 33 * s, All_Student[s].ID_Number);
+
+                outtextxy(410, 152 + 33 * s, All_Student[s].Name);
+
+                outtextxy(540, 152 + 33 * s, All_Student[s].Sex);
+
+                outtextxy(637, 152 + 33 * s, All_Student[s].Age);
+
+                outtextxy(752, 152 + 33 * s, All_Student[s].Speciality);
+
+                outtextxy(950, 152 + 33 * s, All_Student[s].Design);
+            }
+            flag = 1;
+        }
+
         int i = 0;
         MOUSEMSG Mouse;
         Mouse = GetMouseMsg();
@@ -291,6 +321,8 @@ void User_Management(void)
         int i = 0;
         MOUSEMSG Mouse;
         Mouse = GetMouseMsg();
+
+        USER_Information_Query();
 
         for (i = 0; i < 4; i++)
         {
@@ -379,79 +411,70 @@ void Information_Query(void)
 
 void Information_Queryc(void)
 {
-    int j = 0;
-    char Information[15];
-    Student Stu[Student_Number];
-    InputBox(Information, 15, "请输入任意一项信息", "信息查询");
+    IMAGE Student_Management;                                               //清屏
+    loadimage(&Student_Management, "F:\\个人资料\\程序\\CourseManagement\\Image\\Common.jpg", 1280, 720);
+    putimage(0, 0, &Student_Management);
+
+    for (int s = 0; s < Student_Number; s++)
+    {
+        settextstyle(25, 9, "微软雅黑");
+        settextcolor(BLACK);
+
+        outtextxy(217, 152 + 33 * s, All_Student[s].ID_Number);
+
+        outtextxy(410, 152 + 33 * s, All_Student[s].Name);
+
+        outtextxy(540, 152 + 33 * s, All_Student[s].Sex);
+
+        outtextxy(637, 152 + 33 * s, All_Student[s].Age);
+
+        outtextxy(752, 152 + 33 * s, All_Student[s].Speciality);
+
+        outtextxy(950, 152 + 33 * s, All_Student[s].Design);
+    }
+
     while (1)
     {
-        if (strlen(Information) != 0)
+        int i = 0;
+        MOUSEMSG Mouse;
+        Mouse = GetMouseMsg();
+
+        if (937 < Mouse.x && Mouse.x < 1080 && 610 < Mouse.y && Mouse.y < 645)
         {
-            for (int i = 0; i < Student_Number; i++)
-            {
-                if (strcmp(Information, All_Student[i].Age) == 0)
-                    Stu[j++] = All_Student[i];
-
-                if (strcmp(Information, All_Student[i].ID_Number) == 0)
-                    Stu[j++] = All_Student[i];
-
-                if (strcmp(Information, All_Student[i].Name) == 0)
-                    Stu[j++] = All_Student[i];
-
-                if (strcmp(Information, All_Student[i].Sex) == 0)
-                    Stu[j++] = All_Student[i];
-
-                if (strcmp(Information, All_Student[i].Speciality) == 0)
-                    Stu[j++] = All_Student[i];
-
-                if (strcmp(Information, All_Student[i].Design) == 0)
-                    Stu[j++] = All_Student[i];
-            }
-
-            IMAGE Student_Management;                                               //清屏
-            loadimage(&Student_Management, "F:\\个人资料\\程序\\CourseManagement\\Image\\Common.jpg", 1280, 720);
-            putimage(0, 0, &Student_Management);
-
-            for (int s = 0; s < j; s++)
-            {
-                settextstyle(25, 9, "微软雅黑");
-                settextcolor(BLACK);
-
-                outtextxy(217, 152 + 33 * s, Stu[s].ID_Number);
-
-                outtextxy(410, 152 + 33 * s, Stu[s].Name);
-
-                outtextxy(540, 152 + 33 * s, Stu[s].Sex);
-
-                outtextxy(637, 152 + 33 * s, Stu[s].Age);
-
-                outtextxy(752, 152 + 33 * s, Stu[s].Speciality);
-
-                outtextxy(950, 152 + 33 * s, Stu[s].Design);
-            }
+            setlinecolor(WHITE);
+            rectangle(937, 610, 1080, 645);
+            if (Mouse.mkLButton)
+                break;
         }
-        while (1)
+        else
         {
-            int i = 0;
-            MOUSEMSG Mouse;
-            Mouse = GetMouseMsg();
 
-            if (937 < Mouse.x && Mouse.x < 1080 && 610 < Mouse.y && Mouse.y < 645)
-            {
-                setlinecolor(WHITE);
-                rectangle(937, 610, 1080, 645);
-                if (Mouse.mkLButton)
-                    break;
-            }
-            else
-            {
-
-                setlinecolor(RGB(34, 42, 53));
-                rectangle(937, 610, 1080, 645);
-            }
+            setlinecolor(RGB(34, 42, 53));
+            rectangle(937, 610, 1080, 645);
         }
-        break;
     }
+
+}
+
+void USER_Information_Query(void)
+{
+    IMAGE User_Management;                                               //清屏
+    loadimage(&User_Management, "F:\\个人资料\\程序\\CourseManagement\\Image\\User_Management.jpg", 1280, 720);
+    putimage(0, 0, &User_Management);
+
+    for (int s = 0; s < 25; s++)
+    {
+        settextstyle(25, 9, "微软雅黑");
+        settextcolor(BLACK);
+
+        outtextxy(345, 135 + 33 * s, All_User[s].Account);
+
+        outtextxy(610, 135 + 33 * s, All_User[s].Password);
+
+        outtextxy(860, 135 + 33 * s, All_User[s].Permission);
+
+    }
+
 }
 
 void User_Add(void)
@@ -473,6 +496,8 @@ void User_Add(void)
         fprintf(fp, "%s %s %s\n", user.Account, user.Password, user.Permission);
         fclose(fp);
     }
+
+    User_Init();
 }
 
 void User_Modify(void)
@@ -481,14 +506,21 @@ void User_Modify(void)
     char user[15], inf[15], res[15];
 
     InputBox(user, 15, "请输入要修改信息的用户名", "修改信息");
-    InputBox(inf, 15, "请输入要修改信息类别", "修改信息");
-    InputBox(res, 15, "请输入要修改为", "修改信息");
 
     for (i = 0; i < User_Number; i++)
     {
         if (strcmp(user, All_User[i].Account) == 0)
             break;
     }
+
+    if (i == User_Number)
+    {
+        InputBox(res, 15, "未查找到此用户", "修改信息", 0, 0, 0, false);
+        goto end;
+    }
+
+    InputBox(inf, 15, "请输入要修改信息类别", "修改信息");
+    InputBox(res, 15, "请输入要修改为", "修改信息");
 
     if (strcmp(inf, "用户名") == 0)
         for (int j = 0; j < 15; j++)
@@ -504,6 +536,7 @@ void User_Modify(void)
 
     User_Information_Save();
     User_Init();
+    end:;
 }
 
 void User_Delete(void)
@@ -542,33 +575,56 @@ void User_Information_Save(void)
 
 void Student_Add(void)
 {
-    Student Stu ;
     FILE* fp;
+    Student Stu ;    
+    bool Ensure[6];
 
-    InputBox(Stu.Name, Lenth_Name, "请输入学生姓名：", "添加学生");
-    InputBox(Stu.ID_Number, Lenth_IDNumber, "请输入学生学号：", "添加学生");
-    InputBox(Stu.Age, Lenth_Age, "请输入学生年龄：", "添加学生");
-    InputBox(Stu.Sex, Lenth_Sex, "请输入学生性别：", "添加学生");
-    InputBox(Stu.Speciality, Lenth_Speciality, "请输入学生专业：", "添加学生");
+    Ensure[0] = InputBox(Stu.Name, Lenth_Name, "请输入学生姓名：", "添加学生", 0, 0, 0, false);
 
-    if (fopen_s(&fp, "Data.txt", "a"))
+    Ensure[1] = InputBox(Stu.ID_Number, Lenth_IDNumber, "请输入学生学号：", "添加学生", 0, 0, 0, false);
+
+    Ensure[2] = InputBox(Stu.Age, Lenth_Age, "请输入学生年龄：", "添加学生", 0, 0, 0, false);
+
+    Ensure[3] = InputBox(Stu.Sex, Lenth_Sex, "请输入学生性别：", "添加学生", 0, 0, 0, false);
+
+    Ensure[4] = InputBox(Stu.Speciality, Lenth_Speciality, "请输入学生专业：", "添加学生", 0, 0, 0, false);
+    for (int i = 0; i < 5; i++)
     {
-        printf("Fail to open file!\n");
-        exit(0);
+        if (!Ensure[i])
+            Ensure[5] = true;          
     }
+    if (strlen(Stu.Name) == 0)
+        Ensure[5] = true;
+    if (strlen(Stu.ID_Number) == 0)
+        Ensure[5] = true;
+    if (strlen(Stu.Age) == 0)
+        Ensure[5] = true;
+    if (strlen(Stu.Sex) == 0)
+        Ensure[5] = true;
+    if (strlen(Stu.Speciality) == 0)
+        Ensure[5] = true;
 
-    else {
-        fprintf(fp, "%s %s %s %s %s 未提交\n",
-            Stu.ID_Number,
-            Stu.Name,
-            Stu.Sex,
-            Stu.Age,
-            Stu.Speciality,
-            Stu.Design);
-        fclose(fp);
-    }
+        if (!Ensure)
+        {
+            if (fopen_s(&fp, "Data.txt", "a"))
+            {
+                printf("Fail to open file!\n");
+                exit(0);
+            }
 
-    Student_Init();                                         //信息更新
+            else {
+                fprintf(fp, "%s %s %s %s %s 未提交\n",
+                    Stu.ID_Number,
+                    Stu.Name,
+                    Stu.Sex,
+                    Stu.Age,
+                    Stu.Speciality,
+                    Stu.Design);
+                fclose(fp);
+            }
+            Student_Init();                                         //信息更新
+            flag = 0;
+        }
 
 }
 
@@ -586,32 +642,33 @@ void Student_Modify(void)
             break;
     }
 
-        if (strcmp(inf, "姓名") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].Name[j] = res[j];
+    if (strcmp(inf, "姓名") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].Name[j] = res[j];
         
-        if (strcmp(inf, "学号") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].ID_Number[j] = res[j];
+    if (strcmp(inf, "学号") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].ID_Number[j] = res[j];
 
-        if (strcmp(inf, "专业") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].Speciality[j] = res[j];
+    if (strcmp(inf, "专业") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].Speciality[j] = res[j];
 
-        if (strcmp(inf, "性别") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].Sex[j] = res[j];
+    if (strcmp(inf, "性别") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].Sex[j] = res[j];
 
-        if (strcmp(inf, "年龄") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].Age[j] = res[j];
+    if (strcmp(inf, "年龄") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].Age[j] = res[j];
 
-        if (strcmp(inf, "报告提交情况") == 0)
-            for (int j = 0; j < 15; j++)
-                All_Student[i].Design[j] = res[j];
+    if (strcmp(inf, "报告提交情况") == 0)
+        for (int j = 0; j < 15; j++)
+            All_Student[i].Design[j] = res[j];
 
-        Student_Information_Save();
-        Student_Init();
+    Student_Information_Save();
+    Student_Init();
+    flag = 0;
 }
 
 void Student_Delete(void)
@@ -630,6 +687,7 @@ void Student_Delete(void)
 
         Student_Information_Save();
         Student_Init();
+        flag = 0;
     }
 
 }

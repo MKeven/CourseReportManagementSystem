@@ -66,7 +66,7 @@ void Grade_Update(void);
 void User_Add(void);                              // 用户信息录入
 void User_Modify(void);                           // 用户信息修改
 void User_Delete(void);                           // 用户信息删除
-void User_Output(User user, int i);               // 用户信息输出
+void USER_Information_Query(void);                // 用户信息输出
 
 void Student_Add(void);                           // 学生信息录入
 void Student_Modify(void);                        // 学生信息修改
