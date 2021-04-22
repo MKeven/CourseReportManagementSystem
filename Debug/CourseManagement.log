@@ -1,0 +1,6 @@
+﻿  function.cpp
+F:\个人资料\程序\CourseManagement\function.h(37,2): warning C4091: “typedef ”: 没有声明变量时忽略“Student”的左侧
+F:\个人资料\程序\CourseManagement\function.h(44,2): warning C4091: “typedef ”: 没有声明变量时忽略“User”的左侧
+F:\个人资料\程序\CourseManagement\function.cpp(622,24): warning C4474: fprintf: 格式字符串中传递的参数太多
+F:\个人资料\程序\CourseManagement\function.cpp(622,24): message : 占位符和其参数预计 5 可变参数，但提供的却是 6 参数
+  CourseManagement.vcxproj -> F:\个人资料\程序\CourseManagement\Debug\CourseManagement.exe
